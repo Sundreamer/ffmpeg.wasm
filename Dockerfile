@@ -152,20 +152,26 @@ FROM ffmpeg-base AS ffmpeg-builder
 COPY build/ffmpeg.sh /src/build.sh
 RUN bash -x /src/build.sh \
       --enable-gpl \
-      --enable-libx264 \
-      --enable-libx265 \
-      --enable-libvpx \
-      --enable-libmp3lame \
-      --enable-libtheora \
-      --enable-libvorbis \
-      --enable-libopus \
-      --enable-zlib \
-      --enable-libwebp \
-      --enable-libfreetype \
-      --enable-libfribidi \
-      --enable-libass \
-      --enable-libzimg 
-
+      --disable-pthreads \
+      --disable-w32threads \
+      --disable-os2threads \
+      --disable-everything \
+      --enable-protocol=file \
+      --enable-encoder=libmp3lame \
+      --enable-encoder=aac \
+      --enable-encoder=pcm_s16le \
+      --enable-decoder=mp3 \
+      --enable-decoder=aac \
+      --enable-decoder=pcm_s16le \
+      --enable-muxer=mp3 \
+      --enable-muxer=wav \
+      --enable-muxer=mp4 \
+      --enable-demuxer=mp3 \
+      --enable-demuxer=wav \
+      --enable-demuxer=mov \
+      --enable-parser=mp3 \
+      --enable-parser=aac \
+      --enable-filters \
 # Build ffmpeg.wasm
 FROM ffmpeg-builder AS ffmpeg-wasm-builder
 COPY src/bind /src/src/bind
@@ -173,32 +179,17 @@ COPY src/fftools /src/src/fftools
 COPY build/ffmpeg-wasm.sh build.sh
 # libraries to link
 ENV FFMPEG_LIBS \
-      -lx264 \
-      -lx265 \
-      -lvpx \
       -lmp3lame \
-      -logg \
-      -ltheora \
-      -lvorbis \
-      -lvorbisenc \
-      -lvorbisfile \
-      -lopus \
-      -lz \
-      -lwebpmux \
-      -lwebp \
-      -lsharpyuv \
-      -lfreetype \
-      -lfribidi \
-      -lharfbuzz \
-      -lass \
-      -lzimg
+      -lz
 RUN mkdir -p /src/dist/umd && bash -x /src/build.sh \
       ${FFMPEG_LIBS} \
-      -o dist/umd/ffmpeg-core.js
+      -o dist/umd/ffmpeg-core.js \
+      -s INITIAL_MEMORY=33554432  # 32MB initial memory
 RUN mkdir -p /src/dist/esm && bash -x /src/build.sh \
       ${FFMPEG_LIBS} \
       -sEXPORT_ES6 \
-      -o dist/esm/ffmpeg-core.js
+      -o dist/esm/ffmpeg-core.js \
+      -s INITIAL_MEMORY=33554432  # 32MB initial memory
 
 # Export ffmpeg-core.wasm to dist/, use `docker buildx build -o . .` to get assets
 FROM scratch AS exportor
