@@ -164,7 +164,7 @@ RUN bash -x /src/build.sh \
       --enable-muxer=wav,mp3 \
       --enable-demuxer=wav,mp3 \
       --enable-parser=mp3 \
-      --enable-filter=volume,equalizer,aecho,apulsator,afir,anlmdn,afftdn,silenceremove,pan,aresample,atempo,asetrate,bass,treble
+      --enable-filter=volume,equalizer,anull,aformat,aresample,aecho,apulsator,afir,anlmdn,afftdn,silenceremove,pan,atempo,asetrate,bass,treble
 # Build ffmpeg.wasm
 FROM ffmpeg-builder AS ffmpeg-wasm-builder
 COPY src/bind /src/src/bind
