@@ -172,16 +172,16 @@ COPY src/fftools /src/src/fftools
 COPY build/ffmpeg-wasm.sh build.sh
 # libraries to link
 ENV FFMPEG_LIBS \
-      -lmp3lame \
+      -lmp3lame
 RUN mkdir -p /src/dist/umd && bash -x /src/build.sh \
       ${FFMPEG_LIBS} \
       -o dist/umd/ffmpeg-core.js \
-      -s INITIAL_MEMORY=33554432  # 32MB initial memory
+      -s INITIAL_MEMORY=33554432
 RUN mkdir -p /src/dist/esm && bash -x /src/build.sh \
       ${FFMPEG_LIBS} \
       -sEXPORT_ES6 \
       -o dist/esm/ffmpeg-core.js \
-      -s INITIAL_MEMORY=33554432  # 32MB initial memory
+      -s INITIAL_MEMORY=33554432
 
 # Export ffmpeg-core.wasm to dist/, use `docker buildx build -o . .` to get assets
 FROM scratch AS exportor
