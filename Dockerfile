@@ -158,20 +158,13 @@ RUN bash -x /src/build.sh \
       --disable-everything \
       --enable-protocol=file \
       --enable-encoder=libmp3lame \
-      --enable-encoder=aac \
       --enable-encoder=pcm_s16le \
       --enable-decoder=mp3 \
-      --enable-decoder=aac \
       --enable-decoder=pcm_s16le \
-      --enable-muxer=mp3 \
-      --enable-muxer=wav \
-      --enable-muxer=mp4 \
-      --enable-demuxer=mp3 \
-      --enable-demuxer=wav \
-      --enable-demuxer=mov \
+      --enable-muxer=wav,mp3 \
+      --enable-demuxer=wav,mp3 \
       --enable-parser=mp3 \
-      --enable-parser=aac \
-      --enable-filters
+      --enable-filter=volume,equalizer,aecho,apulsator,afir,anlmdn,afftdn,silenceremove,pan,aresample,atempo,asetrate,bass,treble
 # Build ffmpeg.wasm
 FROM ffmpeg-builder AS ffmpeg-wasm-builder
 COPY src/bind /src/src/bind
@@ -180,7 +173,6 @@ COPY build/ffmpeg-wasm.sh build.sh
 # libraries to link
 ENV FFMPEG_LIBS \
       -lmp3lame \
-      -lz
 RUN mkdir -p /src/dist/umd && bash -x /src/build.sh \
       ${FFMPEG_LIBS} \
       -o dist/umd/ffmpeg-core.js \
