@@ -171,7 +171,7 @@ RUN bash -x /src/build.sh \
       --enable-demuxer=mov \
       --enable-parser=mp3 \
       --enable-parser=aac \
-      --enable-filters \
+      --enable-filters
 # Build ffmpeg.wasm
 FROM ffmpeg-builder AS ffmpeg-wasm-builder
 COPY src/bind /src/src/bind
