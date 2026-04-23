@@ -156,11 +156,23 @@ RUN bash -x /src/build.sh \
       --enable-libmp3lame \
       --enable-libopus \
       --enable-protocol=file \
-      --enable-encoder=pcm_s16le,libmp3lame,flac,opus \
-      --enable-decoder=pcm_s16le,mp3,flac,opus \
-      --enable-muxer=wav,mp3,flac,ogg \
-      --enable-demuxer=wav,mp3,flac,ogg \
-      --enable-parser=mp3,flac \
+      --enable-encoder=pcm_s16le \
+      --enable-encoder=libmp3lame \
+      --enable-encoder=flac \
+      --enable-encoder=libopus \
+      --enable-decoder=pcm_s16le \
+      --enable-decoder=mp3 \
+      --enable-decoder=flac \
+      --enable-muxer=wav \
+      --enable-muxer=mp3 \
+      --enable-muxer=flac \
+      --enable-muxer=ogg \
+      --enable-demuxer=wav \
+      --enable-demuxer=mp3 \
+      --enable-demuxer=flac \
+      --enable-demuxer=ogg \
+      --enable-parser=mp3 \
+      --enable-parser=flac \
       --enable-filter=volume,equalizer,silenceremove,pan,anull,aresample,acompressor,aformat,aecho,apulsator,afir,afftfilt,anlmdn,afftdn,atempo,apad,bass,treble,highpass,lowpass,bandpass
 # Build ffmpeg.wasm
 FROM ffmpeg-builder AS ffmpeg-wasm-builder
