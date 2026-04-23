@@ -153,11 +153,13 @@ COPY build/ffmpeg.sh /src/build.sh
 RUN bash -x /src/build.sh \
       --enable-gpl \
       --disable-everything \
+      --enable-libmp3lame \
+      --enable-libopus \
       --enable-protocol=file \
-      --enable-encoder=pcm_s16le,flac \
-      --enable-decoder=pcm_s16le,mp3,flac \
-      --enable-muxer=wav,mp3,flac \
-      --enable-demuxer=wav,mp3,flac \
+      --enable-encoder=pcm_s16le,libmp3lame,flac,opus \
+      --enable-decoder=pcm_s16le,mp3,flac,opus \
+      --enable-muxer=wav,mp3,flac,ogg \
+      --enable-demuxer=wav,mp3,flac,ogg \
       --enable-parser=mp3,flac \
       --enable-filter=volume,equalizer,silenceremove,pan,anull,aresample,acompressor,aformat,aecho,apulsator,afir,afftfilt,anlmdn,afftdn,atempo,apad,bass,treble,highpass,lowpass,bandpass
 # Build ffmpeg.wasm
@@ -168,6 +170,7 @@ COPY build/ffmpeg-wasm.sh build.sh
 # libraries to link
 ENV FFMPEG_LIBS \
       -lmp3lame \
+      -lopus \
       -lz
 RUN mkdir -p /src/dist/umd && bash -x /src/build.sh \
       ${FFMPEG_LIBS} \
