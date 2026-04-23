@@ -152,19 +152,14 @@ FROM ffmpeg-base AS ffmpeg-builder
 COPY build/ffmpeg.sh /src/build.sh
 RUN bash -x /src/build.sh \
       --enable-gpl \
-      --disable-pthreads \
-      --disable-w32threads \
-      --disable-os2threads \
       --disable-everything \
       --enable-protocol=file \
-      --enable-encoder=libmp3lame \
-      --enable-encoder=pcm_s16le \
-      --enable-decoder=mp3 \
-      --enable-decoder=pcm_s16le \
+      --enable-encoder=libmp3lame,pcm_s16le \
+      --enable-decoder=mp3,pcm_s16le \
       --enable-muxer=wav,mp3 \
       --enable-demuxer=wav,mp3 \
       --enable-parser=mp3 \
-      --enable-filter=volume,equalizer,silenceremove,pan,anull,aresample,acompressor,aformat,aecho,apulsator,afir,afftfilt,anlmdn,afftdn,atempo,bass,treble,highpass,lowpass,bandpass
+      --enable-filter=volume,equalizer,silenceremove,pan,anull,aresample,acompressor,aformat,aecho,apulsator,afir,afftfilt,anlmdn,afftdn,atempo,apad,bass,treble,highpass,lowpass,bandpass
 # Build ffmpeg.wasm
 FROM ffmpeg-builder AS ffmpeg-wasm-builder
 COPY src/bind /src/src/bind
